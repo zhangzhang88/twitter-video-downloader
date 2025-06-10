@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  video-downloader:
+    build: .
+    container_name: video-downloader
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+          memory: 768M
+        reservations:
+          memory: 256M 
