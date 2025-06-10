@@ -16,7 +16,7 @@ export default async function handler(
     }
 
     // 使用 -f best 参数来获取最佳质量的视频，并使用 -g 参数只获取视频 URL
-    const command = `python3 -m yt_dlp "${videoLink}" -f best -g`;
+    const command = `yt-dlp "${videoLink}" -f best -g`;
     console.log('Executing command:', command);
 
     const { stdout, stderr } = await execAsync(command);
