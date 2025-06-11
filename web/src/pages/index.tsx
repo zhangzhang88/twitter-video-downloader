@@ -45,6 +45,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div className={styles.homeButton}>
+        <a href="https://ztr8.uk" target="_blank" rel="noopener noreferrer">
+          Homepage
+        </a>
+      </div>
       <main className={styles.main}>
         <div className={styles.center}>
           <h1 className={styles.title}>

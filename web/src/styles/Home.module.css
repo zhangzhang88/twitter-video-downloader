@@ -8,6 +8,29 @@
   padding: 2rem;
 }
 
+.homeButton {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+}
+
+.homeButton a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  color: white;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.homeButton a:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
 .center {
   display: flex;
   flex-direction: column;

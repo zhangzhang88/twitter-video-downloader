@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 services:
   video-downloader:
@@ -7,6 +7,8 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    networks:
+      - npm_default
     environment:
       - NODE_ENV=production
     deploy:
@@ -15,4 +17,8 @@ services:
           cpus: '0.8'
           memory: 768M
         reservations:
-          memory: 256M 
+          memory: 256M
+
+networks:
+  npm_default:
+    external: true 
