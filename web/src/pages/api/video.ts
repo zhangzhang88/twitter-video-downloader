@@ -22,7 +22,7 @@ export default async function handler(
       command = `yt-dlp "${videoLink}" -f "b" --no-check-certificates --no-warnings --get-url --get-title`;
     } else if (videoLink.includes('twitter.com') || videoLink.includes('x.com')) {
       // Twitter视频使用特定参数，获取标题和URL
-      command = `yt-dlp "${videoLink}" --no-check-certificates --no-warnings --extractor-args "twitter:authorization_source=web_client" --get-url --get-title`;
+      command = `yt-dlp "${videoLink}" --no-check-certificates --no-warnings -f "best[ext=mp4]" --get-url --get-title`;
     } else {
       // 其他视频使用默认参数
       command = `yt-dlp "${videoLink}" -f "bv*+ba/b" --no-check-certificates --no-warnings --get-url --get-title`;
@@ -32,6 +32,7 @@ export default async function handler(
 
     const { stdout, stderr } = await execAsync(command);
     
+    console.log('Command stdout:', stdout);
     if (stderr) {
       console.error('Command stderr:', stderr);
     }
@@ -40,7 +41,11 @@ export default async function handler(
     const [title, ...urls] = stdout.trim().split('\n');
     const videoUrl = urls[0];
 
+    console.log('Video title:', title);
+    console.log('Video URL:', videoUrl);
+
     if (!videoUrl) {
+      console.error('No video URL found in output');
       throw new Error('No video URL found');
     }
 
@@ -55,7 +60,7 @@ export default async function handler(
       }]
     });
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error details:", error);
     return res.status(500).json({ 
       found: false, 
       error: "Failed to get video",
