@@ -15,8 +15,19 @@ export default async function handler(
       return res.status(400).json({ found: false, error: "No video link provided" });
     }
 
-    // 使用更好的参数组合来下载视频
-    const command = `yt-dlp "${videoLink}" -f "bv*+ba/b" --no-check-certificates --no-warnings -g`;
+    // 根据链接类型使用不同的下载参数
+    let command;
+    if (videoLink.includes('youtube.com') || videoLink.includes('youtu.be')) {
+      // YouTube视频使用基本参数
+      command = `yt-dlp "${videoLink}" -f "b" --no-check-certificates --no-warnings -g`;
+    } else if (videoLink.includes('twitter.com') || videoLink.includes('x.com')) {
+      // Twitter视频使用特定参数
+      command = `yt-dlp "${videoLink}" --no-check-certificates --no-warnings --extractor-args "twitter:authorization_source=web_client" -g`;
+    } else {
+      // 其他视频使用默认参数
+      command = `yt-dlp "${videoLink}" -f "bv*+ba/b" --no-check-certificates --no-warnings -g`;
+    }
+
     console.log('Executing command:', command);
 
     const { stdout, stderr } = await execAsync(command);
