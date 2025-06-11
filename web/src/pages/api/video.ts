@@ -16,7 +16,7 @@ export default async function handler(
     }
 
     // 使用更好的参数组合来下载视频
-    const command = `yt-dlp "${videoLink}" -f "bv*+ba/b" --no-check-certificates --cookies-from-browser chrome -g`;
+    const command = `yt-dlp "${videoLink}" -f "bv*+ba/b" --no-check-certificates --no-warnings -g`;
     console.log('Executing command:', command);
 
     const { stdout, stderr } = await execAsync(command);
