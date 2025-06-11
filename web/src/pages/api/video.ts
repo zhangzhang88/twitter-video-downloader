@@ -19,13 +19,13 @@ export default async function handler(
     let command;
     if (videoLink.includes('youtube.com') || videoLink.includes('youtu.be')) {
       // YouTube视频使用基本参数
-      command = `yt-dlp "${videoLink}" -f "b" --no-check-certificates --no-warnings -g`;
+      command = `yt-dlp "${videoLink}" -f "b" --no-check-certificates --no-warnings --get-url --get-title`;
     } else if (videoLink.includes('twitter.com') || videoLink.includes('x.com')) {
-      // Twitter视频使用特定参数
-      command = `yt-dlp "${videoLink}" --no-check-certificates --no-warnings --extractor-args "twitter:authorization_source=web_client" -g`;
+      // Twitter视频使用特定参数，获取标题和URL
+      command = `yt-dlp "${videoLink}" --no-check-certificates --no-warnings --extractor-args "twitter:authorization_source=web_client" --get-url --get-title`;
     } else {
       // 其他视频使用默认参数
-      command = `yt-dlp "${videoLink}" -f "bv*+ba/b" --no-check-certificates --no-warnings -g`;
+      command = `yt-dlp "${videoLink}" -f "bv*+ba/b" --no-check-certificates --no-warnings --get-url --get-title`;
     }
 
     console.log('Executing command:', command);
@@ -36,19 +36,22 @@ export default async function handler(
       console.error('Command stderr:', stderr);
     }
 
-    // yt-dlp -g 可能会输出两个URL（视频和音频），我们取第一个
-    const urls = stdout.trim().split('\n');
+    // yt-dlp 输出格式：第一行是标题，第二行是URL
+    const [title, ...urls] = stdout.trim().split('\n');
     const videoUrl = urls[0];
 
     if (!videoUrl) {
       throw new Error('No video URL found');
     }
 
+    // 返回视频信息，包括标题
     return res.status(200).json({
       found: true,
       media: [{
         url: videoUrl,
-        type: "video"
+        type: "video",
+        title: title || "Video",
+        needsProxy: true // 添加这个标志来告诉前端使用代理播放
       }]
     });
   } catch (error) {
