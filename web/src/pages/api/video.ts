@@ -15,8 +15,8 @@ export default async function handler(
       return res.status(400).json({ found: false, error: "No video link provided" });
     }
 
-    // 使用 -f best 参数来获取最佳质量的视频，并使用 -g 参数只获取视频 URL
-    const command = `yt-dlp "${videoLink}" -f best -g`;
+    // 使用更好的参数组合来下载视频
+    const command = `yt-dlp "${videoLink}" -f "bv*+ba/b" --no-check-certificates --cookies-from-browser chrome -g`;
     console.log('Executing command:', command);
 
     const { stdout, stderr } = await execAsync(command);
@@ -25,8 +25,9 @@ export default async function handler(
       console.error('Command stderr:', stderr);
     }
 
-    // yt-dlp -g 输出的是直接的视频 URL
-    const videoUrl = stdout.trim();
+    // yt-dlp -g 可能会输出两个URL（视频和音频），我们取第一个
+    const urls = stdout.trim().split('\n');
+    const videoUrl = urls[0];
 
     if (!videoUrl) {
       throw new Error('No video URL found');
