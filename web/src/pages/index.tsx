@@ -1,20 +1,17 @@
-import { ArrowLineDown, CaretDoubleRight } from "phosphor-react";
-import { FormEvent, useState } from "react";
-import { Button } from "../components/Button";
-import axios from "axios";
+import { useState } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
-  const [videoLink, setVideoLink] = useState("");
+  const [videoLink, setVideoLink] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [videoInfo, setVideoInfo] = useState<any>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError('');
     setVideoInfo(null);
 
     try {
@@ -43,29 +40,25 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Universal Video Downloader</title>
-        <meta name="description" content="Download videos from multiple platforms with just one click" />
+        <title>Twitter Video Downloader</title>
+        <meta name="description" content="Download videos from Twitter/X with just one click" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
         <div className={styles.center}>
           <h1 className={styles.title}>
-            Universal Video Downloader
+            Twitter Video Downloader
           </h1>
           <p className={styles.description}>
-            Download videos from multiple platforms with just one click
+            Download videos from Twitter/X with just one click
           </p>
-          <div className={styles.platforms}>
-            <span>✓ Twitter/X</span>
-            <span>✓ YouTube</span>
-          </div>
           <form onSubmit={handleSubmit} className={styles.form}>
             <input
               type="text"
               value={videoLink}
               onChange={(e) => setVideoLink(e.target.value)}
-              placeholder="Paste video link here..."
+              placeholder="Paste Twitter/X video link here..."
               className={styles.input}
             />
             <button type="submit" disabled={loading} className={styles.button}>

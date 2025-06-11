@@ -15,18 +15,16 @@ export default async function handler(
       return res.status(400).json({ found: false, error: "No video link provided" });
     }
 
-    // 根据链接类型使用不同的下载参数
-    let command;
-    if (videoLink.includes('youtube.com') || videoLink.includes('youtu.be')) {
-      // YouTube视频使用基本参数
-      command = `yt-dlp "${videoLink}" -f "b" --no-check-certificates --no-warnings --get-url --get-title`;
-    } else if (videoLink.includes('twitter.com') || videoLink.includes('x.com')) {
-      // Twitter视频使用特定参数，获取标题和URL
-      command = `yt-dlp "${videoLink}" --no-check-certificates --no-warnings -f "best[ext=mp4]" --get-url --get-title`;
-    } else {
-      // 其他视频使用默认参数
-      command = `yt-dlp "${videoLink}" -f "bv*+ba/b" --no-check-certificates --no-warnings --get-url --get-title`;
+    // 验证是否是 Twitter/X 链接
+    if (!videoLink.includes('twitter.com') && !videoLink.includes('x.com')) {
+      return res.status(400).json({ 
+        found: false, 
+        error: "Invalid link. Please provide a Twitter/X video link" 
+      });
     }
+
+    // Twitter视频下载命令
+    const command = `yt-dlp "${videoLink}" --no-check-certificates --no-warnings -f "best[ext=mp4]" --get-url --get-title`;
 
     console.log('Executing command:', command);
 
@@ -55,8 +53,8 @@ export default async function handler(
       media: [{
         url: videoUrl,
         type: "video",
-        title: title || "Video",
-        needsProxy: true // 添加这个标志来告诉前端使用代理播放
+        title: title || "Twitter Video",
+        needsProxy: true
       }]
     });
   } catch (error) {
